@@ -1,0 +1,65 @@
+/* Saved and system theme choices share the same semantic color tokens. */
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: #f7f8f7;
+    --surface: #f1f6f4;
+    --icon-bg: #e8efec;
+    --code-block-bg: #f2f4f3;
+    /* Desaturated so the chip is quieter; 5.12:1 on --inline-code-bg. */
+    --inline-code-bg: #dfe3e1;
+    --inline-code-text: #2f6659;
+    --text: #22302b;
+    --heading: #0f1f1a;
+    --muted: #5b6b65;
+    --line: #d6e1dd;
+    --accent: #007a63;
+    --accent-hover: #005f4d;
+    --accent-2: #00af8c;
+    --brand: #00af8c;
+    --brand-deep: #035343;
+    --button: #035343;
+    --button-text: #ffffff;
+    --button-hover: #00705a;
+    --code-bg: #0b1713;
+    --code-text: #d6e4df;
+    @variant dark {
+      color-scheme: dark;
+      /* Keep the canvas in sync with the shared SVG ink in site/colors.typ. */
+      --bg: #1b1e1d;
+      --surface: #1e2022;
+      --icon-bg: #26292b;
+      --code-block-bg: #202322;
+      --inline-code-bg: #3a3d3e;
+      --inline-code-text: #b6c4bf;
+      --text: #d6d9d8;
+      --heading: #eef0ef;
+      --muted: #a3aaa6;
+      --line: #303436;
+      --accent: #3fd1ae;
+      --accent-hover: #6fe3c6;
+      --accent-2: #8cf5dc;
+      --brand-deep: #0b7a62;
+      --button: #00c79e;
+      --button-text: #031d17;
+      --button-hover: #34e8c1;
+      --code-bg: #101211;
+      --code-text: #d6d9d8;
+    }
+  }
+
+  :root:is([data-page-kind="doc"], [data-page-kind="post"]) {
+    @variant dark {
+      --surface: #242627;
+      --code-block-bg: #1f2122;
+      --inline-code-bg: #323537;
+      --inline-code-text: #c8ced0;
+      --text: #c9cbce;
+      --heading: #e5e7e9;
+      --muted: #a3a8ab;
+      --line: #333638;
+      --accent: #35c3a1;
+      --accent-hover: #65dfbe;
+    }
+  }
+}

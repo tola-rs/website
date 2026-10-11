@@ -1,0 +1,8 @@
+{
+  "tola.configPath": "tola.toml",
+  "tola.nu.enabled": false,
+  "files.associations": {
+    "**/theme/styles/**/*.css": "tailwindcss"
+  },
+  "nushellLanguageServer.nushellExecutablePath": "/Users/kawayww/projects/tola-doc/.tola/editor/nu-launcher"
+}

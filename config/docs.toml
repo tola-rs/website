@@ -1,0 +1,26 @@
+[modules.docs.options]
+logo = "static/brand/logo.svg"
+favicon = "static/brand/favicon.svg"
+repository = "https://github.com/tola-rs/tola-ssg"
+site-repository = "https://github.com/tola-rs/website"
+versions = { tola = "0.8.2-pre.3", typst = "0.15.1" }
+version-labels = { tola = "Tola", typst = "Typst" }
+copyright = { years = "2025–2026", holder = "KawaYww", url = "https://github.com/kawayww", contributors = "https://github.com/tola-rs/website/graphs/contributors?all=1" }
+docs-groups = ["getting-started", "concepts", "guide", "reference"]
+nav-pages = ["/themes/"]
+blog-feed = "always"
+font = "Noto Sans SC"
+
+[modules.docs.options.messages.en.docs]
+groups = { getting-started = "Getting started", concepts = "Concepts", guide = "Guide", reference = "Reference" }
+sidebar-titles = { "/docs/reference/overview/" = "Overview", "/docs/reference/config/" = "Configuration index", "/docs/reference/packages/" = "Package index", "/docs/reference/scripts/" = "Script index" }
+
+[modules.docs.options.messages.en.blog]
+feed-description = "News and development notes from Tola."
+
+[modules.docs.options.messages.zh-Hans.docs]
+groups = { getting-started = "开始使用", concepts = "核心概念", guide = "教程与示例", reference = "参考" }
+sidebar-titles = { "/docs/reference/overview/" = "总览", "/docs/reference/config/" = "配置索引", "/docs/reference/packages/" = "包索引", "/docs/reference/scripts/" = "脚本索引" }
+
+[modules.docs.options.messages.zh-Hans.blog]
+feed-description = "Tola 的项目动态与开发记录。"

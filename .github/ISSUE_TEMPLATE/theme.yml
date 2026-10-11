@@ -1,0 +1,68 @@
+name: Theme submission
+description: Suggest a theme or site built with Tola for the themes page.
+title: "[Theme] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing your work. Entries are shown in English. A maintainer will check the build before adding the theme to the gallery.
+
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      placeholder: My Tola theme
+    validations:
+      required: true
+
+  - type: input
+    id: repo
+    attributes:
+      label: Repository URL
+      placeholder: https://github.com/you/my-theme
+    validations:
+      required: true
+
+  - type: input
+    id: demo
+    attributes:
+      label: Live demo URL
+      placeholder: https://example.com
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License
+      placeholder: MIT
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description (English)
+      description: One or two sentences describing the theme.
+    validations:
+      required: true
+
+  - type: input
+    id: screenshot
+    attributes:
+      label: Screenshot URL
+      description: A 16:10 screenshot of the home page, or attach it after opening the issue.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: The site builds with the current Tola release.
+          required: true
+        - label: The repository has a license.
+          required: true
+        - label: I own or maintain this project.
+          required: true

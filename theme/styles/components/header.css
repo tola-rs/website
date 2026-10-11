@@ -1,0 +1,75 @@
+/* A full-width header: brand and search lead, navigation and controls trail.
+   On small screens the two rows keep every destination and control available. */
+
+@layer components {
+  .site-header { @apply sticky top-0 z-20 border-b border-line bg-canvas; }
+  .header-inner {
+    @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-mobile-gutter py-2;
+    @apply sm:flex sm:min-h-18 sm:gap-5 sm:px-5 sm:py-3;
+  }
+  .brand {
+    @apply w-fit shrink-0 text-heading text-[1.4rem] font-bold tracking-tighter no-underline;
+  }
+  .header-search { @apply min-w-0 justify-self-end; }
+  .main-nav { @apply min-w-0 text-sm; }
+  .main-nav a {
+    @apply inline-flex min-h-10 items-center px-2 text-muted font-normal no-underline transition-colors;
+    &:hover { @apply text-ink; }
+    &[aria-current] { @apply text-accent; }
+    @apply sm:px-2;
+  }
+  .toolbar { @apply justify-self-end text-sm; }
+  .header-divider { @apply mx-1 h-4 w-px shrink-0 bg-line/60; }
+  @media (width >= theme(--breakpoint-sm)) {
+    .header-search { @apply mr-1; }
+  }
+
+  .search-trigger {
+    @apply min-h-10 w-10 select-none justify-center p-0 text-muted;
+    &:hover { @apply border-muted text-ink; }
+    @apply md:min-h-9 md:w-auto md:justify-start md:gap-2 md:border md:border-line/60 md:bg-canvas md:px-2.5 md:font-normal;
+  }
+  .search-trigger > .ui-icon { @apply md:size-4; }
+  .search-trigger .control-label {
+    @apply sr-only;
+    @apply md:not-sr-only;
+  }
+  .search-trigger kbd {
+    @apply hidden ml-1;
+    @apply md:inline-flex md:min-h-5 md:items-center md:rounded-[2px] md:border md:border-line/60 md:bg-canvas md:px-1.5 md:py-0.5 md:text-xs md:leading-none md:text-muted md:whitespace-nowrap;
+  }
+  .search-trigger kbd::before { content: "Ctrl K"; }
+  :root.mac .search-trigger kbd::before { content: "⌘ K"; }
+
+  /* Keep the first frame stable while the deferred handlers are loading. */
+  .search-trigger:disabled, .theme-toggle:disabled { @apply opacity-100 cursor-default; }
+  @media (scripting: none) {
+    .search-trigger, .theme-toggle { display: none; }
+  }
+
+  .header-social .icon-control, .theme-toggle { @apply w-8; }
+  .header-menu { @apply sm:relative; }
+  .header-menu-trigger { @apply h-10 gap-1 px-1 text-muted hover:text-ink; }
+  .header-menu > summary { @apply list-none select-none; }
+  .header-menu > summary::-webkit-details-marker { display: none; }
+  .header-menu[open] > summary { @apply text-ink; }
+  .header-menu-trigger > .ui-icon { @apply size-4; }
+  .header-menu-trigger .menu-chevron { @apply size-2.5 opacity-70; }
+  .header-menu[open] .menu-chevron { @apply rotate-180; }
+  .header-panel {
+    @apply absolute inset-x-mobile-gutter top-full z-30 mt-2 max-h-[calc(100dvh-7.75rem)] overflow-y-auto border border-line bg-canvas p-2 text-sm shadow-lg shadow-black/10;
+    @apply sm:left-auto sm:right-0 sm:max-h-[calc(100dvh-5.5rem)];
+  }
+  .language-panel { @apply min-w-44 rounded-[2px] border-muted/30 bg-canvas p-0; }
+  .language-option {
+    @apply flex min-h-10 items-center justify-between gap-6 px-3 py-2 text-muted no-underline focus-visible:-outline-offset-3;
+    &:hover { @apply bg-white/6 text-ink; }
+    &[aria-current] { @apply bg-white/4 text-accent font-medium; }
+  }
+  .language-option + .language-option { @apply border-t border-line; }
+  .language-option .ui-icon { @apply size-4; }
+  .theme-toggle > span { @apply size-full items-center justify-center; }
+  .theme-toggle .ui-icon { @apply size-4; }
+  .theme-toggle .theme-sun { @apply hidden dark:inline-flex; }
+  .theme-toggle .theme-moon { @apply inline-flex dark:hidden; }
+}

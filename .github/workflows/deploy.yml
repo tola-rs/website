@@ -1,0 +1,63 @@
+name: Deploy Site
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Site source
+        type: choice
+        required: true
+        default: release
+        options:
+          - release
+          - local
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: inputs.source == 'release'
+        with:
+          node-version: 24
+      - name: Build with the Tola release
+        if: inputs.source == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/tola"
+          version=$(python3 -c 'import tomllib; print(tomllib.load(open("config/docs.toml", "rb"))["modules"]["docs"]["options"]["versions"]["tola"])')
+          archive="tola-${version}-x86_64-unknown-linux-musl.tar.gz"
+          release="repos/tola-rs/tola-ssg/releases/tags/v${version}"
+          digest=$(gh api "$release" | jq -er --arg file "$archive" '.assets[] | select(.name == $file) | .digest | strings | select(test("^sha256:[0-9a-f]{64}$"))')
+          gh release download "v$version" -R tola-rs/tola-ssg --pattern "$archive" --dir "$RUNNER_TEMP/tola"
+          (
+            cd "$RUNNER_TEMP/tola"
+            printf '%s  %s\n' "${digest#sha256:}" "$archive" | sha256sum -c -
+            tar -xzf "$archive"
+            sudo install -m 0755 tola /usr/local/bin/tola
+          )
+          tola docs setup
+          tola docs check
+          tola build -o release-site
+      - run: test -f "${{ inputs.source == 'local' && 'public' || 'release-site' }}/index.html"
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: ${{ inputs.source == 'local' && 'public' || 'release-site' }}
+      - uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        id: deployment
