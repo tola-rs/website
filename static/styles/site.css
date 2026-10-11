@@ -1,0 +1,16 @@
+/* Browser cascade order is explicit; utilities can override shared components. */
+@layer properties, theme, reset, base, typography, shortcuts, components, utilities;
+@import "./theme.css";
+@import "./base.css";
+@import "./components/layout.css";
+@import "./components/navigation.css";
+@import "./components/prose.css";
+@import "./components/diagram.css";
+@import "./components/frame.css";
+@import "./components/code.css";
+@import "./components/controls.css";
+@import "./components/header.css";
+@import "./components/home.css";
+@import "./components/docs.css";
+@import "./components/search.css";
+@unocss;

@@ -1,0 +1,64 @@
+# Build the site and publish it to GitHub Pages.
+#
+# The site is built by the released Tola binary, not by a build of the current
+# sources, so a deploy always uses the version `TOLA_VERSION` names. Everything
+# else -- the origin, base path, hooks, and publish directory -- comes from
+# `tola.toml`.
+#
+# Run it by hand from the Actions tab; the ref selected there is the ref built.
+name: Deploy Site
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TOLA_VERSION: "0.8.1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: extractions/setup-just@f8a3cce218d9f83db3a2ecd90e41ac3de6cdfd9b # v3.1.0
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: 2.x
+      - name: Install Tola
+        run: |
+          archive="tola-${TOLA_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          base="https://github.com/tola-rs/tola-ssg/releases/download/v${TOLA_VERSION}"
+          curl -fsSL "${base}/${archive}" -o "${archive}"
+          curl -fsSL "${base}/checksums.txt" -o checksums.txt
+          grep " ${archive}$" checksums.txt | sha256sum -c -
+          tar -xzf "${archive}"
+          sudo install -m 0755 tola /usr/local/bin/tola
+          tola --version
+      - run: just setup
+      - run: just check
+      - run: tola build
+      - name: Check the published site
+        run: test -f public/index.html
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

@@ -1,0 +1,20 @@
+{
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "lib": [
+      "deno.ns",
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ]
+  },
+  "imports": {
+    "pagefind": "npm:pagefind@1.5.2",
+    "unocss": "npm:unocss@66.11.0",
+    "postcss": "npm:postcss@8.5.30",
+    "postcss-import": "npm:postcss-import@17.0.1",
+    "lightningcss": "npm:lightningcss@1.33.0",
+    "parse5": "npm:parse5@8.0.1",
+    "magic-string": "npm:magic-string@1.4.3"
+  }
+}

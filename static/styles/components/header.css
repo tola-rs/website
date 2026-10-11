@@ -1,0 +1,75 @@
+/* A full-width header: brand and search lead, navigation and controls trail.
+   On small screens the two rows keep every destination and control available. */
+
+@layer components {
+  .site-header { @apply sticky top-0 z-20 border-b border-line bg-canvas; }
+  .header-inner {
+    @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-4 py-2;
+    @apply sm:(flex min-h-18 gap-5 px-5 py-3);
+  }
+  .brand {
+    @apply w-fit shrink-0 text-heading text-[1.4rem] font-bold tracking-tighter no-underline;
+  }
+  .header-search { @apply min-w-0 justify-self-end; }
+  .main-nav { @apply min-w-0 text-sm; }
+  .main-nav a {
+    @apply inline-flex min-h-10 items-center px-2 text-muted font-normal no-underline transition-colors;
+    &:hover { @apply text-ink; }
+    &[aria-current] { @apply text-accent; }
+    @apply sm:px-2;
+  }
+  .toolbar { @apply justify-self-end text-sm; }
+  .header-divider { @apply mx-1 h-4 w-px shrink-0 bg-line/60; }
+  @screen sm {
+    .header-search { @apply mr-1; }
+  }
+
+  .search-trigger {
+    @apply min-h-10 w-10 select-none justify-center p-0 text-muted;
+    &:hover { @apply border-muted text-ink; }
+    @apply md:(min-h-9 w-auto justify-start gap-2 border border-line/60 bg-canvas px-2.5 font-normal);
+  }
+  .search-trigger > .ui-icon { @apply md:size-4; }
+  .search-trigger .control-label {
+    @apply sr-only;
+    @apply md:(not-sr-only);
+  }
+  .search-trigger kbd {
+    @apply hidden ml-1;
+    @apply md:(inline-flex min-h-5 items-center rounded-[2px] border border-line/60 bg-canvas px-1.5 py-0.5 text-xs leading-none text-muted whitespace-nowrap);
+  }
+  .search-trigger kbd::before { content: "Ctrl K"; }
+  :root.mac .search-trigger kbd::before { content: "⌘ K"; }
+
+  /* Keep the first frame stable while the deferred handlers are loading. */
+  .search-trigger:disabled, .theme-toggle:disabled { @apply opacity-100 cursor-default; }
+  @media (scripting: none) {
+    .search-trigger, .theme-toggle { display: none; }
+  }
+
+  .header-social .icon-control, .theme-toggle { @apply w-8; }
+  .header-menu { @apply relative; }
+  .header-menu-trigger { @apply h-10 gap-1 px-1 text-muted hover:text-ink; }
+  .header-menu > summary { @apply list-none select-none; }
+  .header-menu > summary::-webkit-details-marker { display: none; }
+  .header-menu[open] > summary { @apply text-ink; }
+  .header-menu-trigger > .ui-icon { @apply size-4; }
+  .header-menu-trigger .menu-chevron { @apply size-2.5 opacity-70; }
+  .header-menu[open] .menu-chevron { @apply rotate-180; }
+  .header-panel {
+    @apply fixed left-4 right-4 top-[6.75rem] z-30 max-h-[calc(100dvh-7.75rem)] overflow-y-auto border border-line bg-canvas p-2 text-sm shadow-lg shadow-black/10;
+    @apply sm:(absolute left-auto right-0 top-full mt-2 max-h-[calc(100dvh-5.5rem)]);
+  }
+  .language-panel { @apply min-w-44 overflow-hidden rounded-[2px] border-muted/30 bg-canvas p-0; }
+  .language-option {
+    @apply flex min-h-10 items-center justify-between gap-6 px-3 py-2 text-muted no-underline;
+    &:hover { @apply bg-white/6 text-ink; }
+    &[aria-current] { @apply bg-white/4 text-accent font-medium; }
+  }
+  .language-option + .language-option { @apply border-t border-line; }
+  .language-option .ui-icon { @apply size-4; }
+  .theme-toggle > span { @apply size-full items-center justify-center; }
+  .theme-toggle .ui-icon { @apply size-4; }
+  .theme-toggle .theme-sun { @apply hidden dark:inline-flex; }
+  .theme-toggle .theme-moon { @apply inline-flex dark:hidden; }
+}

@@ -1,0 +1,7 @@
+/* Mermaid diagrams are published SVG files, so they cache, gzip and carry no
+   inline payload. Wide diagrams keep their intrinsic width and scroll. */
+
+@layer components {
+  .mermaid-diagram { @apply overflow-x-auto; }
+  .mermaid-diagram img { @apply block mx-auto h-auto max-w-none; }
+}

@@ -1,0 +1,89 @@
+/* Search dialog, input, result rows and highlighted matches.
+   Structure comes from components/partials/search.typ; search.ts updates results and status. */
+
+@layer components {
+  :root { scrollbar-gutter: stable; }
+  :root:has(.search-popup[open]) { @apply overflow-hidden; }
+  .search-popup {
+    @apply mx-auto mt-[3dvh] max-h-[94dvh] max-w-none w-[min(48rem,calc(100vw-1.5rem))] overflow-hidden panel-surface p-3 shadow-2xl;
+    @apply docs:(mt-[8dvh] max-h-[84dvh]);
+  }
+  .search-popup[open] { @apply flex flex-col; }
+  .search-popup::backdrop { @apply bg-black/45 backdrop-blur-sm; }
+  .search-field {
+    @apply flex min-h-12 shrink-0 items-center gap-2 rounded-[2px] border border-line bg-canvas px-3 text-muted transition-colors;
+  }
+  .search-field:has(#search-input:focus) { @apply border-accent; }
+  .search-actions { @apply flex shrink-0 items-center; }
+  .search-field > .ui-icon { @apply pointer-events-none shrink-0; }
+  #search-input {
+    @apply min-h-10 min-w-0 flex-1 appearance-none border-0 bg-transparent px-0 py-2 text-base leading-normal text-ink caret-accent focus:outline-none;
+  }
+  #search-input::-webkit-search-cancel-button { @apply hidden; }
+  .search-tool {
+    @apply min-h-9 w-9 shrink-0 rounded-[2px] p-0 text-muted bg-transparent hover:(bg-surface text-ink)
+      focus-visible:(outline-1 outline-accent -outline-offset-1) disabled:(cursor-default opacity-35);
+  }
+  .search-tool .ui-icon { @apply size-4; }
+  #search-details { @apply w-auto gap-1.5 px-2 text-xs; }
+  #search-details[aria-pressed="true"] { @apply bg-surface text-accent; }
+  #search-results-region {
+    @apply min-h-0 overflow-y-auto overscroll-contain;
+    scrollbar-gutter: stable;
+  }
+  #search-status { @apply m-0 shrink-0 px-3 py-3 text-xs leading-relaxed text-muted; }
+  #search-status:is([data-state="empty"], [data-state="none"], [data-state="error"]) { @apply py-6 text-sm; }
+  #search-results { @apply m-0 list-none p-0; }
+  #search-results .search-result { @apply mb-1 min-w-0 rounded-[2px] border border-transparent border-b-line/60; }
+  #search-results .search-result-link {
+    @apply block rounded-[2px] px-3 py-2.5 text-sm text-ink no-underline outline-none;
+  }
+  .search-result-heading { @apply flex min-w-0 flex-col gap-0.5; }
+  .search-result-trail { @apply text-xs leading-relaxed text-muted; overflow-wrap: anywhere; }
+  .search-result-title { @apply text-sm font-semibold leading-relaxed; overflow-wrap: anywhere; }
+  /* Reuse page prose components, never page prose typography.
+     `.prose-excerpt` keeps this projection out of `.prose-page` context rules. */
+  .search-result-excerpt {
+    @apply mt-1 text-[0.8125rem] leading-relaxed text-muted;
+    max-height: 8.75rem;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.55;
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 1.5rem), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1.5rem), transparent);
+  }
+  #search-results .search-result[data-active] .search-result-excerpt { opacity: 0.8; }
+  .search-result-excerpt[hidden] { display: none; }
+  .search-result-excerpt .excerpt-link { @apply text-accent underline underline-offset-2; }
+  .search-result-excerpt img { @apply max-w-full; height: auto; }
+  #search-results .search-result[data-active] {
+    border-color: var(--accent);
+    background: color-mix(in srgb, white 6%, var(--bg));
+  }
+  #search-results .search-result[data-active] > .search-result-link:focus-visible {
+    @apply outline-1 outline-accent -outline-offset-1;
+  }
+  #search-results :is(a, button, [tabindex="0"]):focus-visible { @apply outline-2 outline-accent -outline-offset-2; }
+  .search-footer { @apply mt-2 flex min-h-10 shrink-0 flex-wrap items-center gap-x-5 gap-y-2 border-t border-line/60 px-2 pt-2 text-xs text-muted; }
+  .search-key-hint, .search-close { @apply inline-flex items-center gap-1.5; }
+  .search-footer kbd { @apply inline-flex h-5 min-w-5 items-center justify-center rounded-[2px] border border-line/60 px-1 text-[0.7rem] font-mono text-muted; }
+  .search-close {
+    @apply ml-auto min-h-8 cursor-pointer bg-transparent px-1 py-1 text-xs text-muted hover:(bg-transparent text-ink)
+      focus-visible:(outline-1 outline-accent -outline-offset-1) disabled:(cursor-default opacity-35);
+  }
+  .search-popup mark {
+    @apply rounded-[2px] font-semibold;
+    color: var(--heading);
+    background: color-mix(in srgb, var(--accent) 35%, var(--bg));
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  @screen lt-xs {
+    .search-popup { @apply w-[calc(100vw-1rem)] p-2; }
+    .search-field { @apply gap-1 px-2; }
+    .search-footer { @apply gap-x-3 px-1; }
+    .search-key-hint { @apply gap-1; }
+  }
+}

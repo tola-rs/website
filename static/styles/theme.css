@@ -1,0 +1,37 @@
+/* Saved and system theme choices share the same semantic color tokens. */
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: #f7f8f7;
+    --surface: #f1f6f4;
+    --icon-bg: #e8efec;
+    --code-block-bg: #f1f6f4;
+    /* Desaturated so the chip is quieter; 5.12:1 on --inline-code-bg. */
+    --inline-code-bg: #dfe3e1;
+    --inline-code-text: #2f6659;
+    --text: #22302b;
+    --heading: #0f1f1a;
+    --muted: #5b6b65;
+    --line: #d6e1dd;
+    --accent: #007a63;
+    --accent-hover: #005f4d;
+    --accent-2: #00af8c;
+    --brand: #00af8c;
+    --brand-deep: #035343;
+    --button: #035343;
+    --button-text: #ffffff;
+    --button-hover: #00705a;
+    --code-bg: #0b1713;
+    --code-text: #d6e4df;
+    /* Dark --bg mirrors site/colors.typ; the shared SVG ink is derived there. */
+    @apply dark:[color-scheme:dark] dark:[--bg:#1b1e1d] dark:[--surface:#1e2022] dark:[--icon-bg:#26292b]
+      dark:[--code-block-bg:#1d1f21] dark:[--inline-code-bg:#3a3d3e]
+      dark:[--inline-code-text:#b6c4bf] dark:[--text:#d6d9d8]
+      dark:[--heading:#eef0ef] dark:[--muted:#a3aaa6] dark:[--line:#303436]
+      dark:[--accent:#3fd1ae] dark:[--accent-hover:#6fe3c6]
+      dark:[--accent-2:#8cf5dc] dark:[--brand:#00af8c]
+      dark:[--brand-deep:#0b7a62] dark:[--button:#00c79e]
+      dark:[--button-text:#031d17] dark:[--button-hover:#34e8c1]
+      dark:[--code-bg:#101211] dark:[--code-text:#d6d9d8];
+  }
+}

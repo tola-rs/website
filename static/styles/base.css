@@ -1,0 +1,19 @@
+/* Authored site defaults above Wind4's native preflight.
+   Typography owns article descendants; components own layout and controls. */
+
+@layer base {
+  :root { @apply bg-canvas text-ink font-sans leading-[1.7]; font-synthesis: none; }
+  a { @apply text-accent underline underline-offset-[0.18em]; }
+  a:hover { @apply decoration-[0.12em]; }
+  summary { @apply cursor-pointer; }
+  :focus-visible { @apply outline-3 outline-accent outline-offset-3; }
+  button:disabled { @apply cursor-wait opacity-65; }
+  #content { @apply scroll-mt-30 sm:scroll-mt-24; }
+  /* The skip link moves focus to this container so the browser scrolls here.
+     Its 3px outline reads as a stray accent rule under the sticky header; the
+     skip link itself keeps the visible focus ring. */
+  #content:focus,
+  #content:focus-visible { @apply outline-none; }
+  h1, h2, h3, h4 { @apply scroll-mt-30 sm:scroll-mt-24; }
+  kbd { @apply text-muted text-[0.8em]; font-family: inherit; }
+}

@@ -1,0 +1,8 @@
+/public/
+/.public-publish/
+/.vendor-vendor/
+/node_modules/
+/static/web-assets/*-output/
+/.tola/
+/.tola-build.lock
+.DS_Store

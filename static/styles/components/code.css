@@ -1,0 +1,79 @@
+/* Keep the language above the first code line; copy appears in the same corner on hover. */
+@layer components {
+  .prose pre {
+    @apply relative my-3.5 max-w-full overflow-x-auto rounded-[2px] border border-line px-3 py-5 text-sm leading-relaxed;
+    tab-size: 2;
+  }
+  .code-block { @apply relative my-3.5 min-w-0 max-w-full overflow-hidden rounded-[2px] border border-line/60 bg-code-block; }
+  .code-toolbar { display: contents; }
+  .code-language { @apply pointer-events-none absolute right-2 top-2 z-1 select-none font-sans text-xs font-normal leading-none text-muted; }
+  .prose .code-block pre {
+    @apply m-0 rounded-none border-0 p-0 overscroll-x-contain
+      focus-visible:(outline-1 outline-accent -outline-offset-1);
+  }
+  /* Padding belongs to the scrolling content, so line ends can move clear of
+     the 40px copy button and its 12px inset, with another 12px of breathing room. */
+  .prose .code-block pre > code { @apply block box-border w-max min-w-full whitespace-pre py-5 pr-16 pl-[calc(0.75rem+1ch)]; }
+  .code-block:has(.code-copy[hidden]) pre > code { @apply pr-3; }
+  /* Decoration wraps each line in a block-level span, so a selected line can span the
+     row. The newline text nodes stay in the markup (copy keeps them) and collapse
+     between blocks because the code element no longer preserves them. */
+  .prose .code-block pre > code:has(> .line) { @apply whitespace-normal px-0; }
+  .code-block .line { @apply block whitespace-pre pl-[calc(0.75rem+1ch)] pr-16; }
+  .code-block:has(.code-copy[hidden]) .line { @apply pr-3; }
+  .code-block .line.hl {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    box-shadow: inset 2px 0 0 color-mix(in srgb, var(--accent) 75%, transparent);
+  }
+  .code-block .line.diff-add::before,
+  .code-block .line.diff-del::before { @apply inline-block w-[1ch] -ml-[1ch] font-semibold; }
+  .code-block .line.diff-add { background: color-mix(in srgb, #2ea043 22%, transparent); }
+  .code-block .line.diff-add::before { content: "+"; @apply text-[#3fb950]; }
+  .code-block .line.diff-del { background: color-mix(in srgb, #f85149 22%, transparent); }
+  .code-block .line.diff-del::before { content: "-"; @apply text-[#f85149]; }
+  /* Search excerpts retain native pre/code markup and the same compact label spacing. */
+  .prose pre > code[data-lang]::before {
+    content: attr(data-lang);
+    @apply pointer-events-none absolute right-2 top-2 select-none font-sans text-xs font-normal leading-none text-muted;
+  }
+  .prose .code-block pre > code[data-lang]::before { @apply hidden; }
+  .code-copy {
+    @apply absolute right-3 top-3 z-1 inline-flex size-10 cursor-pointer items-center justify-center rounded-[4px] border border-line/60 bg-canvas/60 p-0 text-muted opacity-0 pointer-events-none transition-colors
+      hover:(border-muted/60 bg-canvas text-ink) focus-visible:(text-accent outline-1 outline-accent -outline-offset-1);
+  }
+  .code-copy[hidden] { @apply hidden; }
+  .code-copy .ui-icon { @apply size-5; }
+  .code-copy .copied-icon { @apply hidden; }
+  .code-copy[data-state="copied"] { @apply text-accent; }
+  .code-copy[data-state="copied"] .copy-icon { @apply hidden; }
+  .code-copy[data-state="copied"] .copied-icon { @apply block; }
+  .code-block:hover .code-copy,
+  .code-copy:is(:focus-visible, [data-state]) { @apply opacity-100 pointer-events-auto; }
+  .code-block:has(.code-copy:not([hidden])):hover .code-language,
+  .code-block:has(.code-copy:is(:focus-visible, [data-state])) .code-language { @apply opacity-0; }
+  @media (hover: none) {
+    .code-copy { @apply opacity-100 pointer-events-auto; }
+    .code-block:has(.code-copy:not([hidden])) .code-language { @apply opacity-0; }
+  }
+
+  /* Tabbed samples: native radios carry the selection, so switching needs no script.
+     Input, label and panel are siblings, which lets adjacent selectors do the work:
+     the chosen label takes the underline and reveals the panel after it. */
+  .code-group {
+    @apply my-3.5 flex min-w-0 max-w-full flex-wrap overflow-hidden rounded-[2px] border border-line/60 bg-code-block;
+  }
+  .code-group > .code-tab-input { @apply absolute h-px w-px opacity-0; }
+  .code-group > .code-tab { @apply relative cursor-pointer px-3 py-2.5 font-sans text-sm text-muted hover:text-ink; order: 1; }
+  .code-group > .code-tab:hover { @apply text-ink; }
+  .code-group > .code-tab-input:checked + .code-tab { @apply text-ink; }
+  .code-group > .code-tab-input:checked + .code-tab::after {
+    @apply content-[''];
+    @apply absolute inset-x-2 bottom-0 h-0.5 bg-accent;
+  }
+  .code-group > .code-tab-input:focus-visible + .code-tab {
+    @apply outline-1 outline-accent -outline-offset-2;
+  }
+  .code-group > .code-panel { @apply hidden w-full border-t border-line/60; order: 2; }
+  .code-group > .code-tab-input:checked + .code-tab + .code-panel { @apply block; }
+  .code-group > .code-panel .code-block { @apply my-0 rounded-none border-0; }
+}

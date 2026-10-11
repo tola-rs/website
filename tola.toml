@@ -1,0 +1,72 @@
+# Build inputs, published resources and deployment settings for this documentation site.
+# Page metadata and UI text are defined in Typst under schemas/ and site/locales/.
+# Tola configuration (v0.8.1)
+# https://github.com/tola-rs/tola-ssg
+
+# tola help "[site]"
+[site]
+origin = "https://tola.build"
+base-path = "/"
+title = "Tola"
+authors = []
+description = "A programmable static site generator built on Typst."
+languages = ["en", "zh-Hans"]
+language = "en"
+
+# tola help "[build]"
+[build]
+entry = "site.typ"
+content-dir = "content"
+publish-dir = "public"
+
+# tola help "[build.hooks]"
+
+# Compile browser scripts before Typst embeds preference initialization.
+[[build.hooks.before-build]]
+enable = true
+name = "typescript"
+command = ["just", "scripts"]
+dev = "run"
+rerun-on = ["static/typescript-sources", "deno.json", "deno.lock", "justfile"]
+generates = ["static/web-assets/typescript-output"]
+
+# Generate CSS from real HTML attributes, after all Typst documents exist.
+[[build.hooks.generate-outputs]]
+enable = true
+name = "unocss"
+command = ["just", "css"]
+dev = "reuse"
+rerun-on = ["static/styles", "scripts", "uno.config.ts", "deno.json", "deno.lock", "justfile"]
+outputs = [{ file = "assets/styles/site.css" }]
+
+[[build.hooks.generate-outputs]]
+enable = true
+name = "search"
+command = ["just", "search"]
+dev = "reuse"
+rerun-on = ["scripts/search-previews.ts", "static/typescript-sources/shared/search-preview.ts", "deno.json", "deno.lock", "justfile"]
+outputs = [{ tree = "assets/pagefind-search" }, { tree = "assets/search-previews" }]
+
+# tola help "[assets]"
+# web-assets publishes as-is to /assets; `*-output/` directories in it are build
+# products (git-ignored), any other file placed there is hand-written.
+[assets]
+cache-busting = true
+trees = [{ source = "static/web-assets", url-prefix = "/assets" }]
+files = []
+
+[icons.collections.lucide]
+source-type = "remote-json"
+preset = "lucide"
+
+[icons.collections.simple-icons]
+source-type = "remote-json"
+preset = "simple-icons"
+
+# tola help "[vendor]"
+[vendor]
+path = "vendor"
+
+[typst.fonts]
+paths = ["static/typst-fonts"]
+system = false

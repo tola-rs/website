@@ -1,0 +1,115 @@
+/* Documentation sidebar, outline and previous/next links.
+   State styling uses native details and aria-current attributes from the components. */
+
+@layer components {
+  .docs-sidebar, .page-toc {
+    @apply static w-full text-sm;
+    --navigation-expanded: 0;
+  }
+  .page-toc { @apply text-[0.8125rem] leading-relaxed; }
+  /* The native disclosures start closed. Scripts expand desktop panels; without
+     scripts their visible summaries remain usable at every viewport size. */
+  .navigation-toggle {
+    @apply flex cursor-pointer select-none items-center justify-between gap-3 border border-line px-3 py-2 text-sm font-semibold text-ink;
+    @apply list-none;
+  }
+  .navigation-toggle::-webkit-details-marker { @apply hidden; }
+  .navigation-toggle .ui-icon { @apply size-4 shrink-0; }
+  .navigation-panel:not([open]) > .navigation-toggle .ui-icon { @apply -rotate-90; }
+  .navigation-panel > nav { @apply pt-3; }
+  .page-toc .navigation-title { @apply hidden; }
+  @screen docs {
+    .docs-sidebar { @apply border-r border-line/40 pr-4; }
+    .layout-blog .page-toc { @apply border-l border-line/40 pl-4; }
+    .docs-sidebar, .layout-blog .page-toc {
+      @apply sticky top-26 max-h-[calc(100vh-8rem)] overflow-y-auto;
+      @apply overscroll-y-contain;
+      --navigation-expanded: 1;
+    }
+    .docs-sidebar .navigation-panel[data-navigation-expanded] > .navigation-toggle,
+    .layout-blog .navigation-panel[data-navigation-expanded] > .navigation-toggle { @apply hidden; }
+    .docs-sidebar .navigation-panel[data-navigation-expanded] > nav,
+    .layout-blog .navigation-panel[data-navigation-expanded] > nav { @apply pt-0; }
+    .layout-blog .page-toc .navigation-panel[data-navigation-expanded] .navigation-title { @apply block; }
+  }
+  @screen toc {
+    .layout-docs .page-toc { @apply border-l border-line/40 pl-4; }
+    .layout-docs .page-toc {
+      @apply sticky top-26 max-h-[calc(100vh-8rem)] overflow-y-auto;
+      @apply overscroll-y-contain;
+      --navigation-expanded: 1;
+    }
+    .layout-docs .page-toc .navigation-panel[data-navigation-expanded] > .navigation-toggle { @apply hidden; }
+    .layout-docs .page-toc .navigation-panel[data-navigation-expanded] > nav { @apply pt-0; }
+    .layout-docs .page-toc .navigation-panel[data-navigation-expanded] .navigation-title { @apply block; }
+  }
+  .docs-sidebar ul, .page-toc ul { @apply m-0 list-none p-0; }
+  .docs-sidebar li, .page-toc li { @apply m-0; }
+  /* The sidebar draws one rail per group's children. The page outline instead uses
+     the pane's own left border as a single continuous rail, so its nested items only
+     indent. */
+  .docs-sidebar .nav-children { @apply ml-2 border-l border-line pl-3; }
+  .page-toc .nav-children { @apply ml-2 pl-3; }
+  .docs-sidebar a, .page-toc a {
+    @apply block rounded-none px-2 py-1.5 text-muted no-underline;
+    &:hover { @apply text-accent; }
+  }
+
+  /* These panes scroll (overflow-y: auto), so a ring drawn outside an item would be clipped
+     at the pane edge; keep rings on items inside them within the item's own box. */
+  .docs-sidebar :focus-visible, .page-toc :focus-visible { @apply -outline-offset-3; }
+  .docs-sidebar nav > ul > li + li { @apply mt-1; }
+  .docs-sidebar nav > ul > li:has(> details[open]) + li { @apply mt-3; }
+  .docs-sidebar .nav-group { @apply mb-2 block text-sm font-semibold text-ink tracking-normal; }
+  /* Group titles carry their own padding so a focus ring has room; a linked title fills its
+     summary, so both boxes and their rings line up with the rows below. */
+  .docs-sidebar a.nav-group { @apply px-2 py-1.5; }
+  .docs-sidebar details.nav-section > summary.nav-group {
+    @apply mb-0.5 flex cursor-pointer select-none items-center gap-2 rounded-none px-2 py-1.5;
+    @apply list-none;
+    &:hover { @apply text-accent; }
+  }
+  .docs-sidebar details.nav-section:not([open]) > summary.nav-group { @apply mb-0; }
+  .docs-sidebar summary.nav-group::-webkit-details-marker { @apply hidden; }
+  .docs-sidebar summary.nav-group .ui-icon { @apply ml-auto size-3.5 shrink-0 text-muted; }
+  .docs-sidebar details.nav-section:not([open]) > summary.nav-group .ui-icon { @apply -rotate-90; }
+  .docs-sidebar summary.nav-group a {
+    @apply -mx-2 -my-1.5 bg-transparent text-ink font-semibold;
+    &:hover { @apply text-accent; }
+  }
+  .docs-sidebar .nav-children .nav-group { @apply mt-3; }
+  .docs-sidebar a[aria-current="page"], .page-toc a[aria-current] {
+    @apply relative text-accent;
+  }
+  /* The marker overlays the existing rail, so selecting an item never changes
+     its padding or moves text. Nested sidebar links sit 1px + 12px past their rail.
+     The rail scrolls and clips at its padding box, so its own offset starts
+     just inside that box; both panes draw the same 2px marker. */
+  .docs-sidebar a[aria-current="page"]::before, .page-toc a[aria-current]::before {
+    @apply content-[''];
+    @apply pointer-events-none absolute inset-y-1.5 left-0 w-0.5 bg-accent;
+  }
+  .docs-sidebar .nav-children a[aria-current="page"]::before { @apply -left-[13px]; }
+  /* The outline's marker rides the pane border at every depth, so a nested active item
+     sits on the same rail instead of floating at its own indent. */
+  @screen docs {
+    .layout-blog .page-toc nav > ul > li > a[aria-current]::before { @apply -left-[16px]; }
+    .layout-blog .page-toc .nav-children a[aria-current]::before { @apply -left-[36px]; }
+  }
+  @screen toc {
+    .layout-docs .page-toc nav > ul > li > a[aria-current]::before { @apply -left-[16px]; }
+    .layout-docs .page-toc .nav-children a[aria-current]::before { @apply -left-[36px]; }
+  }
+  .navigation-title { @apply mt-0 mb-2 text-sm font-semibold text-ink; }
+  /* One full-width row per neighbor: before reads left, after reads right. */
+  .page-neighbors { @apply mt-16 flex flex-col gap-3; }
+  .neighbor {
+    @apply flex items-center gap-3 rounded-[2px] border border-muted/40 bg-transparent px-4 py-3 no-underline transition-colors;
+    &:hover { @apply border-accent/60 bg-white/5; }
+  }
+  .neighbor > .ui-icon { @apply size-5 shrink-0 text-muted; }
+  .neighbor-text { @apply flex min-w-0 flex-col; }
+  .neighbor .muted { @apply text-[0.7rem]; }
+  .neighbor-text strong { @apply text-lg leading-snug font-semibold; }
+  .neighbor.after { @apply flex-row-reverse text-right; }
+}

@@ -1,0 +1,62 @@
+/* Article text, code, callouts, homepage sections and blog lists.
+   Code tokens use the same theme selection as the page, including the system preference. */
+
+@layer components {
+  .prose {
+    overflow-wrap: anywhere;
+  }
+  /* Preserve the site's title scale and compact rhythm over Typography's native
+     article defaults, without reproducing its list/media/definition rules. */
+  .prose :is(h1, h2, h3, h4) { @apply font-bold leading-[1.3] tracking-tight; }
+  .prose h1 { @apply mt-0 mb-4 text-[clamp(2rem,4vw,2.8rem)]; }
+  .prose h2 { @apply mt-10 mb-3.5 text-[1.55rem]; }
+  .prose h3 { @apply mt-7 mb-2.5 text-lg leading-[1.3]; }
+  .prose .has-heading-anchor { @apply relative; }
+  .prose .heading-anchor {
+    @apply absolute right-[calc(100%+0.2em)] inset-y-0 inline-flex w-[0.64em] items-center justify-center select-none text-accent no-underline opacity-0
+      focus-visible:(opacity-100 outline-1 outline-accent outline-offset-1);
+    /* Inherit the rendered heading's scale, including its level and font weight. */
+    font: inherit;
+    @apply text-[1.15em];
+    @apply leading-none;
+  }
+  .prose .heading-anchor::before { content: "#"; }
+  .prose .has-heading-anchor:is(:hover, :focus-within) > .heading-anchor { @apply opacity-100; }
+  .prose p { @apply my-3.5; }
+  .prose strong { @apply font-bold; }
+  .prose :not(pre) > code { @apply rounded-[2px] bg-inline-code px-[0.35em] py-[0.12em] text-[0.9em] font-medium text-code-ink whitespace-nowrap; }
+  .prose :is(h1, h2, h3, h4, h5, h6) code { font-weight: inherit; }
+  .prose blockquote { @apply my-4 border-l-3 px-5 py-1 font-normal not-italic; }
+  .prose .table-scroll { @apply my-6 max-w-full overflow-x-auto; }
+  .prose table { @apply w-full border-collapse text-base leading-[1.7]; }
+  .prose th, .prose td { @apply border border-line px-3.5 py-2.5 text-left align-top; }
+  .prose th { @apply bg-surface font-bold; }
+  .prose hr { @apply my-8; }
+  .muted, .post-meta { @apply text-sm text-muted; }
+  .callout { @apply my-6 border-l-3 border-accent bg-surface px-4 py-2.5; }
+  /* Typst wraps the title in a paragraph, so it is never a direct <strong>.
+     Trim the outer margins of whichever blocks open and close the box, whatever
+     they are, and keep one short gap between the title and the body. */
+  .callout > :first-child { @apply mt-0; }
+  .callout > p + ul, .callout > p + ol { @apply mt-2; }
+  .callout > :last-child { @apply mb-0; }
+  .callout > p:first-child { @apply mb-2; }
+  .callout > p:first-child + * { @apply mt-0; }
+  .prose .post-list { @apply list-none p-0; }
+  .prose .post-list li { @apply m-0 border-t border-line px-0 py-6; }
+  .post-list h2 { @apply my-1.5; }
+  .empty-state { @apply py-5 text-muted; }
+}
+
+/* @tola/code's rules are unlayered and use :where(). Keep these unlayered too,
+   with a light baseline and the same dark variant as the page, including the system preference. */
+.tola-code span {
+  color: var(--tola-code-color, inherit);
+  font-weight: var(--tola-code-weight, inherit);
+  font-style: var(--tola-code-style, inherit);
+  text-decoration-line: var(--tola-code-decoration, inherit);
+  @apply dark:[color:var(--tola-code-dark-color,var(--tola-code-color,inherit))]
+    dark:[font-weight:var(--tola-code-dark-weight,var(--tola-code-weight,inherit))]
+    dark:[font-style:var(--tola-code-dark-style,var(--tola-code-style,inherit))]
+    dark:[text-decoration-line:var(--tola-code-dark-decoration,var(--tola-code-decoration,inherit))];
+}

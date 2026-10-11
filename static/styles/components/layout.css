@@ -1,0 +1,44 @@
+/* Navigation precedes content on mobile; wider layouts place each region explicitly. */
+@layer components {
+  .page-layout {
+    @apply mx-auto min-h-[60vh] max-w-site px-6 pt-6 pb-12;
+    @apply docs:(px-8 pt-10 pb-16);
+  }
+  .layout-page { @apply max-w-page; }
+  .layout-docs, .layout-blog { @apply flex flex-col items-start gap-4; }
+  .layout-docs {
+    @apply docs:(grid grid-cols-[13rem_minmax(0,1fr)] gap-x-7 gap-y-4);
+    @apply toc:(grid-cols-[14rem_minmax(0,1fr)_clamp(14rem,22%,18rem)] gap-10);
+  }
+  .layout-docs > .docs-sidebar {
+    @apply docs:(col-start-1 row-start-1 row-span-2);
+    @apply toc:(row-span-1);
+  }
+  .layout-docs > .page-toc {
+    @apply docs:(col-start-2 row-start-1 static max-h-none);
+    @apply toc:(col-start-3 row-start-1 sticky top-26 max-h-[calc(100dvh-8rem)]);
+  }
+  .layout-docs > main {
+    @apply docs:(col-start-2 row-start-2);
+    @apply toc:(row-start-1);
+  }
+  .layout-blog {
+    @apply max-w-blog;
+    @apply docs:(grid grid-cols-[minmax(0,1fr)_clamp(14rem,22%,18rem)] gap-10);
+  }
+  .layout-blog > main { @apply docs:(col-start-1 row-start-1); }
+  .layout-blog > .page-toc { @apply docs:(col-start-2 row-start-1); }
+  .site-footer { @apply border-t border-line text-muted text-sm; }
+  .footer-inner {
+    @apply mx-auto flex max-w-site flex-wrap justify-between gap-x-8 gap-y-2 px-5 py-6;
+    @apply docs:(px-8);
+  }
+  .footer-inner p { @apply m-0; }
+  .footer-source a,
+  .footer-versions { @apply inline-flex items-center gap-1.5; }
+  .footer-icon { @apply size-4 shrink-0; }
+  .footer-copyright { @apply flex items-center gap-1.5; }
+  .footer-copyright .ui-icon { @apply size-4; }
+  .skip-link:not(:focus) { @apply sr-only; }
+  .skip-link:focus { @apply fixed top-2 left-2 z-100 bg-canvas p-3; }
+}

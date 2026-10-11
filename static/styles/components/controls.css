@@ -1,0 +1,23 @@
+/* Shared base styles are UnoCSS shortcuts. Component variants override them. */
+@layer components {
+  .icon-control { @apply size-10 shrink-0 p-0 text-muted hover:text-ink; }
+  .brand-mark { @apply size-4; }
+  [data-disclosure-animate] > summary .ui-icon {
+    @apply transition-transform duration-150 ease-out motion-reduce:transition-none;
+  }
+
+  /* Only native summary activation animates. Parser/history/viewport restoration
+     updates native state immediately, without playing an initial open animation. */
+  :where(.header-menu, .navigation-panel, .nav-section)::details-content { @apply opacity-0; }
+  :where(.header-menu, .navigation-panel, .nav-section)[open]::details-content { @apply opacity-100; }
+  :where(.header-menu, .navigation-panel, .nav-section)[data-disclosure-animate]::details-content {
+    @apply [transition-property:opacity,content-visibility] duration-150 ease-out [transition-behavior:allow-discrete] motion-reduce:transition-none;
+  }
+  @supports (interpolate-size: allow-keywords) {
+    .nav-section::details-content { @apply h-0 overflow-clip [interpolate-size:allow-keywords]; }
+    .nav-section[open]::details-content { @apply h-auto; }
+    .nav-section[data-disclosure-animate]::details-content {
+      @apply [transition-property:height,opacity,content-visibility] motion-reduce:transition-none;
+    }
+  }
+}

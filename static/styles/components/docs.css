@@ -1,0 +1,84 @@
+/* Documentation pages use the brand palette at a calmer reading intensity:
+   a softer neutral-green surface, lower text contrast, a desaturated accent,
+   and a slightly larger Chinese reading rhythm. The homepage keeps its pitch. */
+
+@layer components {
+  /* Dark --bg matches site/colors.typ so the shared SVG ink stays balanced. */
+  @media (prefers-color-scheme: dark) {
+    :root:is([data-page-kind="doc"], [data-page-kind="post"]):not([data-theme="light"]) {
+      --bg: #1b1e1d;
+      --surface: #131416;
+      --code-block-bg: #111214;
+      --inline-code-bg: #3a3d3e;
+      --inline-code-text: #b6c4bf;
+      --text: #c9cbce;
+      --heading: #e5e7e9;
+      --muted: #93979b;
+      --line: #2b2d30;
+      --accent: #2fbfa0;
+      --accent-hover: #43d2b2;
+    }
+  }
+
+  :root:is([data-page-kind="doc"], [data-page-kind="post"])[data-theme="dark"] {
+    --bg: #1b1e1d;
+    --surface: #131416;
+    --code-block-bg: #111214;
+    --inline-code-bg: #3a3d3e;
+    --inline-code-text: #b6c4bf;
+    --text: #c9cbce;
+    --heading: #e5e7e9;
+    --muted: #93979b;
+    --line: #2b2d30;
+    --accent: #2fbfa0;
+    --accent-hover: #43d2b2;
+  }
+
+  /* Page typography is keyed to `.prose-page`; search excerpts are `.prose-excerpt`
+     and must keep the compact, context-free prose scale. */
+  :root[data-page-kind="doc"] .prose-page {
+    @apply text-[1.0625rem];
+    @apply leading-[1.8];
+  }
+
+  :root[data-page-kind="doc"]:lang(zh-Hans) .prose-page {
+    @apply leading-[1.85];
+    @apply tracking-[0.01em];
+  }
+
+  :root[data-page-kind="doc"] .prose-page > p {
+    @apply my-[1.05em];
+  }
+
+  :root[data-page-kind="doc"] .prose-page h1 {
+    @apply text-[clamp(1.9rem,_3vw,_2.35rem)];
+  }
+
+  :root[data-page-kind="doc"] .prose-page a {
+    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  /* The sidebar shares the page surface; only a rule separates it from prose. */
+  :root[data-page-kind="doc"] .docs-sidebar {
+    @apply border-[var(--line)];
+    @apply bg-transparent;
+  }
+
+  :root[data-page-kind="doc"] .page-toc {
+    @apply border-[var(--line)];
+  }
+
+  @screen toc {
+    :root[data-page-kind="doc"] .layout-docs {
+      grid-template-columns: 12.5rem minmax(0, 1fr) 12.5rem;
+      column-gap: 1.5rem;
+    }
+  }
+
+  :root[data-page-kind="doc"] .layout-docs > main {
+    @apply max-w-[80ch];
+  }
+
+  /* Current items keep the shared marker: accent text plus the 2px rule from
+     navigation.css. No panel, no filled row. */
+}

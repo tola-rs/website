@@ -1,0 +1,83 @@
+/* Shared UnoCSS utilities own layout and type; these are homepage-specific
+   composition rules, compound links and the fluid title scale. */
+@layer components {
+  .layout-home { @apply max-w-none p-0; }
+
+  .home-hero { @apply relative isolate overflow-hidden; }
+  .home-hero::before {
+    @apply pointer-events-none absolute inset-0 -z-1;
+    content: "";
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--line) 75%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--line) 75%, transparent) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image:
+      radial-gradient(ellipse 58% 64% at 60% 36%, black, transparent 72%),
+      linear-gradient(to right, transparent, black 10%, black 90%, transparent),
+      linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
+  }
+
+  .home-mark { @apply relative isolate; }
+  .home-mark::before {
+    @apply pointer-events-none absolute left-1/2 top-1/2 -z-1 aspect-square w-[min(22rem,110%)] -translate-x-1/2 -translate-y-1/2 rounded-full;
+    content: "";
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 12%, transparent), transparent);
+  }
+
+  .home-brand { @apply text-[clamp(2.6rem,5vw,3.8rem)]; }
+  .home-title {
+    @apply text-[clamp(2.5rem,4.3vw,3.7rem)] leading-[1.02] tracking-[-0.05em];
+  }
+
+  .home-title-accent {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(92deg, var(--accent), var(--accent-2) 78%);
+    -webkit-background-clip: text;
+  }
+
+  .home-content a { @apply no-underline; }
+  .home-actions > a { @apply inline-flex rounded-[2px]; }
+  .home-meta a { @apply whitespace-nowrap; }
+  .home-feature-icon [stroke-width] { stroke-width: 1.75; }
+
+  .home-primary {
+    @apply bg-[var(--button)] text-[var(--button-text)];
+  }
+
+  a:is(:hover, :focus-visible) > .home-primary { @apply bg-[var(--button-hover)]; }
+  a:is(:hover, :focus-visible) > .home-secondary { @apply border-[var(--accent)] text-[var(--accent)]; }
+
+  .home-content a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .home-more a {
+    @apply relative inline-flex items-center gap-[0.35rem] text-[var(--accent)];
+    transition: color 200ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .home-more a:is(:hover, :focus-visible) { @apply translate-x-[3px] text-[var(--accent-hover)]; }
+  .home-more .ui-icon { @apply size-[0.85rem]; }
+
+  .home-more a::after {
+    @apply absolute inset-x-0 -bottom-[0.15em] h-px origin-left scale-x-0 bg-current;
+    content: "";
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .home-more a:is(:hover, :focus-visible)::after { @apply scale-x-100; }
+  /* Native math should remain readable inside the narrower capability strip. */
+  .home-capability-body { @apply overflow-x-auto; }
+
+  @screen lt-sm {
+    .home-brand { font-size: clamp(2.35rem, 10vw, 3.1rem); }
+    .home-title { font-size: clamp(1.75rem, 8vw, 3.1rem); }
+    html[lang="zh-Hans"] .home-title {
+      font-size: clamp(1.8rem, 8vw, 2.6rem);
+      letter-spacing: -0.035em;
+    }
+  }
+}

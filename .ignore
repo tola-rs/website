@@ -1,0 +1,9 @@
+/public/
+/.public-publish/
+/.vendor-vendor/
+/node_modules/
+/static/web-assets/tailwind-output/
+/.tola/
+/.tola-build.lock
+.DS_Store
+/vendor
