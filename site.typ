@@ -14,6 +14,7 @@
 #import "templates/base.typ" as base
 #import "templates/blog.typ" as blog
 #import "templates/doc.typ": doc
+#import "templates/themes.typ": themes-page
 #import "templates/not-found.typ": not-found
 #import "/components/content/diagram.typ": publish-diagrams
 #import "/components/content/frame.typ": publish-frames
@@ -52,6 +53,8 @@
     blog.index.with(page, navigation, translations, feed: feed)
   } else if page.kind == "post" {
     blog.post.with(page, navigation, translations, feed: feed)
+  } else if page.kind == "themes" {
+    themes-page.with(page, navigation, translations, feed: feed)
   } else {
     base.page.with(page, navigation, translations, feed: feed)
   }
@@ -73,6 +76,7 @@
   let navigation = (
     home: targets-by-key.at("/", default: none),
     documentation: tree.reading-order.at(0, default: none),
+    themes: targets-by-key.at("/themes/", default: none),
     blog-index: targets-by-key.at("/blog/", default: none),
   )
 

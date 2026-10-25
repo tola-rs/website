@@ -44,6 +44,7 @@
         ))[
           #for (target, section, text) in (
             (navigation.documentation, "docs", messages.navigation.docs),
+            (navigation.at("themes", default: none), "themes", messages.navigation.themes),
             (navigation.blog-index, "blog", messages.navigation.blog),
           ) {
             _navigation-link(page, target, section, text)

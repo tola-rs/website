@@ -18,7 +18,7 @@
 /// Page kind from language-free segments.
 #let page-kind(segments) = {
   let section = segments.at(0, default: none)
-  if section == none { "home" } else if section == "docs" { "doc" } else if section == "blog" {
+  if section == none { "home" } else if section == "themes" { "themes" } else if section == "docs" { "doc" } else if section == "blog" {
     if segments.len() == 1 { "blog-index" } else { "post" }
   } else { "page" }
 }

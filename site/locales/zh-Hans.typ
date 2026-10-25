@@ -7,6 +7,7 @@
   navigation: (
     label: "主导航",
     docs: "文档",
+    themes: "主题",
     blog: "博客",
     skip: "跳至正文",
   ),
@@ -67,6 +68,18 @@
     rss: "订阅 RSS",
     back: "全部文章",
     feed-description: "Tola 的项目动态与开发记录。",
+  ),
+  themes: (
+    title: "主题",
+    count: "共 {count} 个",
+    warningTitle: "警告",
+    warning: "社区主题由社区维护；Tola 不保证其可用性和安全性，使用前请检查许可证。",
+    searchPlaceholder: "搜索",
+    searchLabel: "搜索主题",
+    empty: "没有找到主题。",
+    submit: "提交主题",
+    preview: "打开在线预览",
+    visit: "访问预览站点",
   ),
   not-found: (
     title: "找不到页面",

@@ -7,6 +7,7 @@
   navigation: (
     label: "Main navigation",
     docs: "Docs",
+    themes: "Themes",
     blog: "Blog",
     skip: "Skip to content",
   ),
@@ -67,6 +68,18 @@
     rss: "Subscribe via RSS",
     back: "All blog posts",
     feed-description: "News and development notes from Tola.",
+  ),
+  themes: (
+    title: "Themes",
+    count: "Total: {count}",
+    warningTitle: "Warning",
+    warning: "Community themes are maintained by their authors. Tola does not guarantee their availability or security; check the license before use.",
+    searchPlaceholder: "Search",
+    searchLabel: "Search themes",
+    empty: "No themes found.",
+    submit: "Submit a theme",
+    preview: "Open live preview",
+    visit: "Visit preview site",
   ),
   not-found: (
     title: "Page not found",
