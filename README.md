@@ -18,7 +18,8 @@ This repository builds [tola.build](https://tola.build) from the `docs` theme mo
 
 ## Build
 
-Use a local build of Tola v0.8.2-pre.3 with TOML `include` support.
+Install the [Tola release](https://github.com/tola-rs/tola-ssg/releases) named in
+`config/docs.toml` and use Node.js 24.2 or later.
 
 ```sh
 tola docs setup
@@ -29,9 +30,9 @@ tola build
 Run `tola dev` for live preview, `tola docs guide` for the authoring guide, or
 `tola docs check && tola check` to check both the frontend and the site.
 
-Until a Tola release with TOML `include` support is available, add the local build
-with `git add -f public/`, commit it, then run **Deploy Site** with `source = local`.
-The default `release` mode builds with the GitHub release selected in `config/docs.toml`.
+Pull requests and pushes to `main` build the site in GitHub Actions using the same
+Tola release. Run **Deploy Site** from `main` with **Publish the verified build to
+GitHub Pages** enabled to update the website.
 
 ## Reference pages
 
