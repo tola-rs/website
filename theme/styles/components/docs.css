@@ -1,0 +1,46 @@
+@layer components {
+  /* Page typography is keyed to `.prose-page`; search excerpts are `.prose-excerpt`
+     and must keep the compact, context-free prose scale. */
+  :root[data-page-kind="doc"] .prose-page {
+    @apply text-[clamp(1.0625rem,0.875rem+0.2vw,1.125rem)];
+    @apply leading-[1.65];
+  }
+
+  :root[data-page-kind="doc"]:lang(zh-Hans) .prose-page {
+    @apply leading-[1.7];
+    @apply tracking-[0.01em];
+  }
+
+  :root[data-page-kind="doc"] .prose-page > p {
+    @apply my-[0.8em] leading-[1.75];
+  }
+
+  :root[data-page-kind="doc"]:lang(zh-Hans) .prose-page > p {
+    @apply leading-[1.8];
+  }
+
+  .prose-page .reference-parameters { margin-block: 0.6em; }
+  .prose-page .reference-parameters > li { margin-block: 0.25em; }
+
+  :root[data-page-kind="doc"] .prose-page h1 {
+    @apply text-[clamp(1.9rem,3vw,2.35rem)];
+  }
+
+  :root[data-page-kind="doc"] .prose-page a {
+    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  :root[data-page-kind="doc"] .prose-page :not(pre, .link-preview-signature) > code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* The sidebar shares the page surface; only a rule separates it from prose. */
+  :root[data-page-kind="doc"] .docs-sidebar {
+    @apply border-line bg-transparent;
+  }
+
+  :root[data-page-kind="doc"] .page-toc {
+    @apply border-line;
+  }
+}

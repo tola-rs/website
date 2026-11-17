@@ -1,0 +1,14 @@
+/public/
+node_modules/
+/generated/
+/content/*/docs/reference/config/
+/content/*/docs/reference/packages/*.typ
+!/content/*/docs/reference/packages/index.typ
+/content/*/docs/reference/scripts/*.typ
+!/content/*/docs/reference/scripts/index.typ
+/static/web-assets/*-output/
+# Local raster exports of the brand artwork.
+/static/brand/exports/
+/.tola/
+/.tola-build.lock
+.DS_Store

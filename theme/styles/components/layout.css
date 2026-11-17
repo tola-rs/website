@@ -1,0 +1,55 @@
+/* Navigation precedes content on mobile; wider layouts place each region explicitly. */
+@layer components {
+  .page-layout {
+    @apply mx-auto min-h-[60vh] max-w-site px-mobile-gutter pt-6 pb-12 sm:px-6;
+    @apply docs:px-8 docs:pt-10 docs:pb-16;
+  }
+  .layout-page { @apply max-w-page; }
+  .layout-wide { @apply py-12 sm:px-8; }
+  .layout-wide > main { @apply max-w-page; }
+  .layout-docs, .layout-blog { @apply flex flex-col items-start gap-4; }
+  :root[data-page-kind="doc"] :is(.layout-docs, .header-inner, .footer-inner) {
+    @apply docs:mx-auto docs:max-w-docs docs:px-docs-gutter;
+  }
+  .layout-docs {
+    @apply docs:grid docs:grid-cols-[15.5rem_minmax(0,1fr)] docs:gap-x-7 docs:gap-y-4;
+    @apply toc:gap-x-[clamp(1.5rem,1.75vw,1.75rem)];
+    @variant toc {
+      --docs-sidebar-width: clamp(15.5rem, 17vw, 16rem);
+      grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
+      &:has(> .page-toc) {
+        grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr) clamp(12.5rem, 13.5vw, 13.5rem);
+      }
+    }
+  }
+  .layout-docs > .docs-sidebar-column {
+    @apply w-full docs:col-start-1 docs:row-start-1 docs:row-span-2;
+    @apply toc:row-span-1;
+  }
+  .layout-docs > .page-toc {
+    @apply docs:col-start-2 docs:row-start-1 toc:col-start-3;
+  }
+  .layout-docs > main {
+    @apply docs:col-start-2 docs:row-start-1;
+  }
+  .layout-docs > .page-toc + main { @apply docs:row-start-2 toc:row-start-1; }
+  .layout-blog {
+    @apply max-w-blog;
+    @apply docs:grid docs:grid-cols-[minmax(0,1fr)_clamp(14rem,22%,18rem)] docs:gap-10;
+  }
+  .layout-blog > main { @apply docs:col-start-1 docs:row-start-1; }
+  .layout-blog > .page-toc { @apply docs:col-start-2 docs:row-start-1; }
+  .site-footer { @apply border-t border-line text-muted text-sm; }
+  .footer-inner {
+    @apply mx-auto flex max-w-site flex-wrap justify-between gap-x-8 gap-y-2 px-mobile-gutter py-6;
+    @apply docs:px-8;
+  }
+  .footer-inner p { @apply m-0; }
+  .footer-source a,
+  .footer-versions { @apply inline-flex items-center gap-1.5; }
+  .footer-icon { @apply size-4 shrink-0; }
+  .footer-copyright { @apply flex items-center gap-1.5; }
+  .footer-copyright .ui-icon { @apply size-4; }
+  .skip-link:not(:focus) { @apply sr-only; }
+  .skip-link:focus { @apply fixed top-2 left-2 z-100 bg-canvas p-3; }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "tola-doc-theme",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.2.0"
+  },
+  "scripts": {
+    "bundle": "esbuild",
+    "styles": "tailwindcss",
+    "index": "pagefind",
+    "check": "tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "pagefind": "1.5.2",
+    "parse5": "8.0.1",
+    "esbuild": "0.28.2",
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/cli": "4.3.3",
+    "@tailwindcss/typography": "0.5.20"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "5.9.3"
+  }
+}

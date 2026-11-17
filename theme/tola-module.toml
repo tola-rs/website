@@ -1,0 +1,113 @@
+[typst]
+entry = "lib.typ"
+fonts = ["typst-fonts"]
+
+[build]
+entry = "site.typ"
+
+[options]
+docs-section = "docs"
+docs-groups = []
+nav-pages = []
+blog-feed = "auto"
+font = "Libertinus Serif"
+typescript = true
+styles = true
+search = true
+
+[options.resize-images]
+enabled = false
+format = "webp"
+quality = 80
+widths = []
+background = ""
+
+[commands.setup]
+argv = ["npm", "--prefix", "{module}", "ci"]
+help = "Install the theme's Node.js dependencies"
+
+[commands.check]
+argv = ["npm", "--prefix", "{module}", "run", "check"]
+help = "Type-check the browser scripts and search previews"
+
+[commands.guide]
+skill = "README.md"
+help = "Read the theme's authoring guide"
+
+[assets]
+trees = [{ source = "assets", url-prefix = "/" }]
+
+[icons.collections.ui]
+source-type = "remote-json"
+preset = "lucide"
+version = "1.2.154"
+
+[[hooks.before-build]]
+name = "branding"
+nu = "tools/branding.nu"
+args = ["prepare"]
+rerun-on = { include = ["typst-fonts", { project = "**" }], exclude = [{ project = ".git" }, { project = ".jj" }, { project = ".tola" }, { project = ".tola-build.lock" }, { project = "generated" }, { project = "public" }, { project = "**/node_modules/**" }] }
+generates = ["generated/{name}/brand"]
+
+[[hooks.generate-outputs]]
+name = "branding"
+nu = "tools/branding.nu"
+args = ["publish"]
+dev = "reuse"
+rerun-on = { include = [{ project = "generated/{name}/brand" }] }
+outputs = [{ tree = "_tola-modules/{name}/brand" }]
+
+[[hooks.before-build]]
+name = "images"
+enabled-by = "resize-images.enabled"
+nu = "tools/images.nu"
+args = ["prepare"]
+rerun-on = { include = [{ project = "images" }] }
+generates = ["generated/{name}/images"]
+
+[[hooks.generate-outputs]]
+name = "images"
+enabled-by = "resize-images.enabled"
+nu = "tools/images.nu"
+args = ["publish"]
+dev = "reuse"
+rerun-on = { include = [{ project = "generated/{name}/images" }] }
+outputs = [{ tree = "_tola-modules/{name}/images" }]
+
+# Compile the browser entry points before Typst embeds preference initialization.
+[[hooks.before-build]]
+name = "typescript"
+enabled-by = "typescript"
+nu = "tools/browser.nu"
+args = ["bundle"]
+rerun-on = { include = ["typescript-sources", "tools/browser.nu", "package.json", "package-lock.json"] }
+generates = ["generated/{name}/typescript-output"]
+
+# Compile CSS from the theme and content sources before Typst reads it.
+[[hooks.before-build]]
+name = "styles"
+enabled-by = "styles"
+nu = "tools/browser.nu"
+args = ["styles"]
+rerun-on = { include = ["**/*.typ", "styles", "typescript-sources", "tools/browser.nu", "package.json", "package-lock.json", { project = "**/*.typ" }], exclude = [{ project = ".git" }, { project = ".jj" }, { project = ".tola" }, { project = ".tola-build.lock" }, { project = "public" }, { project = "vendor" }, { project = "**/node_modules/**" }, { project = "generated/{name}/brand" }] }
+generates = ["generated/{name}/styles/site.css"]
+
+# Index the rendered pages and write the rich search previews.
+[[hooks.generate-outputs]]
+name = "search"
+enabled-by = "search"
+nu = "tools/browser.nu"
+args = ["search"]
+dev = "reuse"
+rerun-on = { include = ["tools/browser.nu", "tools/search-previews.ts", "typescript-sources/shared/search-preview.ts", "package.json", "package-lock.json"] }
+outputs = [{ tree = "_tola-modules/{name}/pagefind" }, { tree = "_tola-modules/{name}/search-previews" }]
+
+# Publish the scripts the before-build hook generated as browser assets.
+[[hooks.generate-outputs]]
+name = "scripts"
+enabled-by = "typescript"
+nu = "tools/browser.nu"
+args = ["publish"]
+dev = "reuse"
+rerun-on = { include = ["tools/browser.nu", { project = "generated/{name}/typescript-output" }] }
+outputs = [{ tree = "_tola-modules/{name}/scripts" }]

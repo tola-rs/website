@@ -1,0 +1,37 @@
+include = [
+    "config/docs.toml",
+    "config/reference.toml",
+    "config/gallery.toml",
+]
+
+[site]
+origin = "https://tola.build"
+base-path = "/"
+title = "Tola"
+authors = []
+description = "A static site generator built on Typst."
+languages = ["en", "zh-Hans"]
+language = "en"
+
+[build]
+entry = { module = "docs" }
+
+[modules.docs]
+path = "theme"
+
+[options]
+license = { name = "MIT", url = "https://github.com/tola-rs/tola-ssg/blob/main/LICENSE" }
+
+[assets]
+cache-busting = true
+# Gallery screenshots and script.
+trees = [{ source = "static/web-assets", url-prefix = "/assets" }]
+files = []
+
+[vendor]
+path = "vendor"
+
+[typst.fonts]
+paths = []
+modules = ["docs"]
+system = false

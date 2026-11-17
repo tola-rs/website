@@ -1,0 +1,16 @@
+[modules.docs]
+path = "theme"
+tree_sha256 = "9e25dc108c8762f29522c18f0b9255d560b44e2d5b3d4fa79c508585e630474b"
+
+[packages."@preview/merman"]
+version = "0.5.0"
+tree_sha256 = "fb6a609168e6719c6eb27cd1fc79b7f4f5d6b864e40f60a3abf87004610a40c0"
+
+[icons."modules/docs/ui"]
+url = "https://registry.npmjs.org/@iconify-json/lucide/-/lucide-1.2.154.tgz"
+sha256 = "2e713e58751aba7e787b7ab1162fc0ba787b9e46840ad40fd4211721a954b1e6"
+size = 672454
+
+[icons."modules/docs/ui".source.preset]
+preset = "lucide"
+version = "1.2.154"

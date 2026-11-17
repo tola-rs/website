@@ -1,0 +1,210 @@
+@layer components {
+  :where(a[data-link-preview]) {
+    position: relative;
+    --link-preview-gap: 1rem;
+    --link-preview-stroke: color-mix(in srgb, var(--muted) 75%, var(--line));
+  }
+
+  .link-preview-card,
+  .link-preview-connector {
+    display: none;
+    position: absolute;
+    inset-block-start: 100%;
+    left: 50%;
+    translate: -50% 0;
+    z-index: 25;
+  }
+
+  .link-preview-card {
+    margin-block-start: var(--link-preview-gap);
+    box-sizing: border-box;
+    inline-size: min(18rem, calc(100vw - 2rem));
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--line);
+    border-radius: 0.375rem;
+    background: var(--surface);
+    color: var(--muted);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+    font: 400 0.875rem / 1.5 var(--font-sans);
+    letter-spacing: normal;
+    text-align: start;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* The transparent area around the line carries hover across the gap. */
+  .link-preview-connector {
+    inline-size: 100%;
+    block-size: var(--link-preview-gap);
+    background: linear-gradient(var(--link-preview-stroke) 0 0) center / 2px 100% no-repeat;
+  }
+
+  .link-preview-tip { display: none; }
+
+  .link-preview-card::before {
+    content: attr(data-title);
+    display: block;
+    color: var(--heading);
+    font-weight: 600;
+  }
+
+  .link-preview-card:has(> .link-preview-signature) {
+    inline-size: min(24rem, calc(100vw - 2rem));
+  }
+
+  .link-preview-signature {
+    display: block;
+    margin-block-start: 0.375rem;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 0.25rem;
+    background: var(--code-block-bg);
+    color: var(--text);
+    font: 400 0.75rem / 1.45 var(--font-mono);
+    white-space: pre-wrap;
+  }
+
+  .link-preview-signature > code.tola-code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    white-space: inherit;
+  }
+
+  .link-preview-signature [data-code-text]::before { content: attr(data-code-text); }
+
+  .link-preview-card:not([data-description=""])::after {
+    content: attr(data-description);
+    display: block;
+    margin-block-start: 0.25rem;
+  }
+
+  /* A below-link fallback must let the pointer reach the next list item. */
+  .reference-exports :is(.link-preview-card, .link-preview-connector) { pointer-events: none; }
+
+  a[data-link-preview]:focus-visible > :is(.link-preview-card, .link-preview-connector) { display: block; }
+
+  @media (any-hover: hover) {
+    :where(:root:not([data-link-preview-scrolled])) a[data-link-preview]:hover > :is(.link-preview-card, .link-preview-connector) {
+      display: block;
+    }
+  }
+
+  @supports (anchor-scope: --link-preview) and (position-area: block-end span-all) {
+    :where(a[data-link-preview]) {
+      anchor-name: --link-preview;
+      anchor-scope: --link-preview, --link-preview-label, --link-preview-card;
+    }
+
+    :where(a[data-link-preview] > code:only-of-type) { anchor-name: --link-preview-label; }
+
+    .link-preview-card {
+      position: fixed;
+      inset: auto;
+      inset-inline: 0.75rem;
+      translate: none;
+      position-anchor: --link-preview;
+      anchor-name: --link-preview-card;
+      position-area: block-end span-all;
+      position-try-fallbacks: flip-block;
+      justify-self: anchor-center;
+    }
+
+    .link-preview-connector {
+      position: fixed;
+      inset: auto;
+      /* Join the painted label, when present, to the nearer card edge. */
+      top: min(anchor(--link-preview-label bottom, anchor(--link-preview bottom)), anchor(--link-preview-card bottom));
+      bottom: min(anchor(--link-preview-label top, anchor(--link-preview top)), anchor(--link-preview-card top));
+      left: anchor(--link-preview-label center, anchor(--link-preview center));
+      inline-size: anchor-size(--link-preview inline, 1.5rem);
+      block-size: auto;
+    }
+
+    @supports (container-type: anchored) {
+      .link-preview-card { container-type: anchored; }
+
+      .link-preview-tip {
+        display: block;
+        position: fixed;
+        top: anchor(--link-preview-card top);
+        left: anchor(--link-preview-label center, anchor(--link-preview center));
+        width: 0.5rem;
+        height: 0.375rem;
+        translate: -50% -100%;
+        background: var(--link-preview-stroke);
+        clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 38%, 50% 100%, 0 38%);
+        pointer-events: none;
+      }
+
+      @container anchored(fallback: flip-block) {
+        .link-preview-tip {
+          top: anchor(--link-preview-card bottom);
+          translate: -50% 0;
+          rotate: 180deg;
+        }
+      }
+    }
+
+    @media (width >= 40rem) {
+      .reference-exports {
+        inline-size: fit-content;
+        max-inline-size: 100%;
+      }
+
+      /* Give every trigger the width of the list so even short names clear the
+         longest member in the next row. */
+      .reference-exports > li > a {
+        display: block;
+        padding-inline-end: 0.5rem;
+      }
+
+      .reference-exports .link-preview-card {
+        position-area: inline-end span-all;
+        position-try-fallbacks: flip-inline;
+        position-visibility: no-overflow;
+        inset-block: 0.75rem;
+        inset-inline-start: 0;
+        margin: 0;
+        margin-inline-start: var(--link-preview-gap);
+        min-inline-size: 12rem;
+        max-inline-size: 100%;
+        align-self: anchor-center;
+        justify-self: start;
+        pointer-events: auto;
+      }
+
+      .reference-exports .link-preview-connector {
+        top: anchor(--link-preview-label center, anchor(--link-preview center));
+        bottom: auto;
+        left: min(anchor(--link-preview-label right, anchor(--link-preview right)), anchor(--link-preview-card right));
+        right: min(anchor(--link-preview-label left, anchor(--link-preview left)), anchor(--link-preview-card left));
+        inline-size: auto;
+        block-size: anchor-size(--link-preview block, 1.5rem);
+        translate: 0 -50%;
+        background-size: 100% 2px;
+        pointer-events: auto;
+      }
+
+      @supports (container-type: anchored) {
+        .reference-exports .link-preview-tip {
+          top: anchor(--link-preview-label center, anchor(--link-preview center));
+          left: anchor(--link-preview-card left);
+          width: 0.375rem;
+          height: 0.5rem;
+          translate: -100% -50%;
+          clip-path: polygon(0 0, 62% 50%, 0 100%, 38% 100%, 100% 50%, 38% 0);
+        }
+
+        @container anchored(fallback: flip-inline) {
+          .reference-exports .link-preview-tip {
+            left: anchor(--link-preview-card right);
+            translate: 0 -50%;
+            rotate: 180deg;
+          }
+        }
+      }
+    }
+  }
+}

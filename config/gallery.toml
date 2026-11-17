@@ -1,0 +1,11 @@
+[options.theme-gallery]
+submit-url = "https://github.com/tola-rs/website/issues/new?template=theme.yml"
+
+[[options.theme-gallery.entries]]
+name = "NASAPunk"
+description = "A blog theme for Typst posts, with light and dark palettes."
+repo = "https://github.com/KKKZOZ/tola-theme-nasapunk"
+demo = "https://kkkzoz.github.io/tola-theme-nasapunk/"
+tags = ["blog", "dark mode", "diagrams", "search"]
+screenshot = "/assets/themes/nasapunk.webp"
+alt = "NASAPunk home page split between light and dark themes"

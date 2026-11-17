@@ -1,0 +1,13 @@
+[[hooks.before-build]]
+name = "reference"
+nu = "tools/export-reference.nu"
+rerun-on = { include = ["tools/export-reference.nu"] }
+generates = [
+    "generated/reference.json",
+    "content/en/docs/reference/config",
+    "content/en/docs/reference/packages",
+    "content/en/docs/reference/scripts",
+    "content/zh-hans/docs/reference/config",
+    "content/zh-hans/docs/reference/packages",
+    "content/zh-hans/docs/reference/scripts",
+]

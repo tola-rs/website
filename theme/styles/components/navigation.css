@@ -1,0 +1,136 @@
+/* Documentation sidebar, outline and previous/next links.
+   State styling uses native details and aria-current attributes from the components. */
+
+@utility sticky-navigation {
+  @apply sticky top-26 overflow-y-auto overscroll-y-contain;
+  line-height: 1.5;
+  --navigation-expanded: 1;
+  --navigation-row-padding: 0.25rem;
+}
+
+@layer components {
+  .docs-sidebar, .page-toc {
+    @apply static w-full text-sm;
+    --navigation-expanded: 0;
+    --navigation-row-padding: 0.375rem;
+    --navigation-row-inset: 0px;
+    --navigation-current-bg: color-mix(in srgb, var(--bg), black 4%);
+    @variant dark { --navigation-current-bg: color-mix(in srgb, var(--bg), white 5%); }
+  }
+  .page-toc { @apply text-[0.8125rem] leading-relaxed; }
+  /* The native disclosures start closed. Scripts expand desktop panels; without
+     scripts their visible summaries remain usable at every viewport size. */
+  .navigation-toggle {
+    @apply flex cursor-pointer select-none items-center justify-between gap-3 border border-line px-3 py-2 text-sm font-semibold text-ink;
+    @apply list-none;
+  }
+  .navigation-toggle::-webkit-details-marker { @apply hidden; }
+  .navigation-toggle .ui-icon { @apply size-4 shrink-0; }
+  .navigation-panel:not([open]) > .navigation-toggle .ui-icon { @apply -rotate-90; }
+  .navigation-panel > nav { @apply pt-3; }
+  .page-toc .navigation-title { @apply hidden; }
+  .navigation-panel[data-navigation-expanded] {
+    > .navigation-toggle { @apply hidden; }
+    > nav { @apply pt-0; }
+    .navigation-title { @apply block; }
+  }
+
+  @media (width >= theme(--breakpoint-docs)) {
+    .docs-sidebar {
+      --navigation-expanded: 1;
+      --navigation-row-padding: 0.25rem;
+      @apply border-r border-line/40 pr-4;
+    }
+    .docs-sidebar-column:has(> .docs-sidebar > [data-navigation-expanded]) {
+      @apply sticky top-26 h-[calc(100dvh-8rem)];
+      padding-block-start: var(--docs-sidebar-inset, 0px);
+    }
+    .docs-sidebar:has(> [data-navigation-expanded]) {
+      @apply h-full overflow-y-auto overscroll-y-contain;
+    }
+    .layout-blog .page-toc {
+      --navigation-row-inset: 1rem;
+      @apply sticky-navigation max-h-[calc(100vh-8rem)] border-l border-line/40 ps-(--navigation-row-inset);
+    }
+  }
+  @media (width >= theme(--breakpoint-toc)) {
+    .layout-docs .page-toc {
+      --navigation-row-inset: 1rem;
+      @apply sticky-navigation max-h-[calc(100dvh-8rem)] border-l border-line/40 ps-(--navigation-row-inset);
+    }
+  }
+  .docs-sidebar ul, .page-toc ul { @apply m-0 list-none p-0; }
+  .docs-sidebar li, .page-toc li { @apply m-0; }
+  /* The sidebar draws one rail per group's children. The page outline instead uses
+     the pane's own left border as a single continuous rail, so its nested items only
+     indent. */
+  .docs-sidebar .nav-children {
+    --navigation-row-inset: calc(0.75rem + 1px);
+    @apply ms-2 border-s border-line ps-3;
+  }
+  .page-toc .nav-children { @apply ms-2 ps-3; }
+  .page-toc .nav-children a { --navigation-indent: 1.25rem; }
+  .docs-sidebar a, .page-toc a {
+    @apply block rounded-none px-2 text-muted no-underline;
+    padding-block: var(--navigation-row-padding);
+    &:hover { @apply text-accent; }
+  }
+
+  /* These panes scroll (overflow-y: auto), so a ring drawn outside an item would be clipped
+     at the pane edge; keep rings on items inside them within the item's own box. */
+  .docs-sidebar :focus-visible, .page-toc :focus-visible { @apply -outline-offset-3; }
+  .docs-sidebar nav > ul > li + li { @apply mt-1; }
+  .docs-sidebar nav > ul > li:has(> details[open]) + li { @apply mt-3; }
+  .docs-sidebar .nav-group { @apply mb-2 block text-sm font-semibold text-ink tracking-normal; }
+  /* The whole group row opens and closes its disclosure. */
+  .docs-sidebar details.nav-section > summary.nav-group {
+    @apply mb-0.5 flex cursor-pointer select-none items-center gap-2 rounded-none px-2;
+    @apply list-none;
+    padding-block: var(--navigation-row-padding);
+    &:hover { background-color: var(--navigation-current-bg); }
+  }
+  .docs-sidebar details.nav-section:not([open]) > summary.nav-group { @apply mb-0; }
+  .docs-sidebar summary.nav-group::-webkit-details-marker { @apply hidden; }
+  .docs-sidebar summary.nav-group .ui-icon { @apply ml-auto size-3.5 shrink-0 text-muted; }
+  .docs-sidebar details.nav-section:not([open]) > summary.nav-group .ui-icon { @apply -rotate-90; }
+  .docs-sidebar .nav-children .nav-group { @apply mt-3; }
+  /* One painted row joins the marker to the fill across the indentation. */
+  .docs-sidebar li > a[aria-current="page"],
+  .page-toc a[aria-current] {
+    @apply relative isolate;
+
+    &::before {
+      @apply pointer-events-none absolute inset-y-0 end-0 -z-1 border-s-2 border-accent content-[''];
+      inset-inline-start: calc(-1 * (var(--navigation-row-inset) + var(--navigation-indent, 0px)));
+      background-color: var(--navigation-current-bg);
+      @media (forced-colors: active) { border-color: Highlight; }
+    }
+  }
+  .docs-sidebar a[aria-current="page"], .page-toc a[aria-current] {
+    @apply text-accent;
+  }
+  .navigation-title { @apply mt-0 mb-2 text-sm font-semibold text-ink; }
+  /* Pair links only on very wide screens with room in the reading column. */
+  .page-neighbors {
+    @apply mt-16 grid auto-cols-fr gap-3;
+    container-type: inline-size;
+  }
+  .neighbor {
+    @apply flex min-w-0 items-center gap-3 rounded-[2px] border border-muted/40 bg-transparent px-4 py-3 no-underline transition-colors;
+    &:hover { @apply border-accent/60 bg-white/5; }
+  }
+  .neighbor > .ui-icon { @apply size-5 shrink-0 text-muted; }
+  .neighbor-text { @apply flex min-w-0 flex-col; }
+  .neighbor .muted { @apply text-[0.7rem]; }
+  .neighbor-text strong { @apply text-lg leading-snug font-semibold wrap-anywhere; }
+  .neighbor.after { @apply flex-row-reverse text-right; }
+
+  @media (width >= 120rem) {
+    @container (inline-size >= 36rem) {
+      .page-neighbors:has(> .before + .after) > .neighbor { @apply row-start-1; }
+      .page-neighbors:has(> .before + .after) > .before { @apply col-start-1; }
+      .page-neighbors:has(> .before + .after) > .after { @apply col-start-2; }
+      .page-neighbors:has(> .before + .after) .neighbor-text strong { @apply text-base; }
+    }
+  }
+}

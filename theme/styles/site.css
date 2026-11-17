@@ -1,0 +1,73 @@
+/* Browser cascade order is explicit; utilities can override shared components. */
+@layer theme, base, typography, components, utilities;
+@import "tailwindcss" source(none);
+@import "./fonts.css";
+@import "./theme.css";
+@import "./base.css";
+@import "./components/layout.css";
+@import "./components/navigation.css";
+@import "./components/prose.css";
+@import "./components/link-preview.css";
+@import "./components/diagram.css";
+@import "./components/frame.css";
+@import "./components/code.css";
+@import "./components/controls.css";
+@import "./components/header.css";
+@import "./components/home.css";
+@import "./components/docs.css";
+@import "./components/search.css";
+
+@source "../**/*.typ";
+@source "../typescript-sources/**/*.ts";
+@plugin "@tailwindcss/typography" {
+  className: prose-defaults;
+}
+
+@layer typography {
+  .prose { @apply prose-defaults; }
+}
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --breakpoint-xs: 28rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-docs: 60rem;
+  --breakpoint-toc: 80rem;
+  --container-reading: 74ch;
+  --container-site: 90rem;
+  --container-docs: 96rem;
+  --container-page: 76rem;
+  --container-blog: 70rem;
+  --spacing-mobile-gutter: 1.25rem;
+  --spacing-docs-gutter: clamp(2rem, 2.25vw, 2.25rem);
+}
+
+@theme inline {
+  --color-canvas: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--text);
+  --color-heading: var(--heading);
+  --color-inline-code: var(--inline-code-bg);
+  --color-code-ink: var(--inline-code-text);
+  --color-code-block: var(--code-block-bg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+}
+
+@custom-variant dark {
+  &:where(:root[data-theme="dark"], :root[data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
+@utility panel-surface {
+  @apply rounded-none border border-line bg-canvas text-ink;
+}
