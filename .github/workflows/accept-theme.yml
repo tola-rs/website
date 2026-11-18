@@ -1,0 +1,34 @@
+name: Accept a theme
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions: {}
+
+jobs:
+  prepare:
+    name: Prepare the gallery pull request
+    if: >-
+      ${{ !github.event.issue.pull_request && github.event.issue.state == 'open' &&
+      startsWith(github.event.issue.title, '[Theme] ') &&
+      startsWith(github.event.comment.body, '/accept-theme') &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: accept-theme-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: ./.github/actions/setup-tola
+      - name: Prepare the gallery change and reply to the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tola nu tools/accept-theme.nu

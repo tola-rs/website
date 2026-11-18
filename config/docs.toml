@@ -3,7 +3,7 @@ logo = "static/brand/logo.svg"
 favicon = "static/brand/favicon.svg"
 repository = "https://github.com/tola-rs/tola-ssg"
 site-repository = "https://github.com/tola-rs/website"
-versions = { tola = "0.8.2-pre.3", typst = "0.15.1" }
+versions = { tola = "0.8.2", typst = "0.15.1" }
 version-labels = { tola = "Tola", typst = "Typst" }
 copyright = { years = "2025–2026", holder = "KawaYww", url = "https://github.com/kawayww", contributors = "https://github.com/tola-rs/website/graphs/contributors?all=1" }
 docs-groups = ["getting-started", "concepts", "guide", "reference"]

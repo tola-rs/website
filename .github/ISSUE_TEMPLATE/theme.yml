@@ -1,24 +1,17 @@
 name: Theme submission
-description: Suggest a theme or site built with Tola for the themes page.
+description: Submit a reusable Tola theme for the gallery.
 title: "[Theme] "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for sharing your work. Entries are shown in English. A maintainer will check the build before adding the theme to the gallery.
-
-  - type: input
-    id: name
-    attributes:
-      label: Name
-      placeholder: My Tola theme
-    validations:
-      required: true
+        Use the theme name in the issue title. A maintainer will check the license and build before adding the theme to the gallery.
 
   - type: input
     id: repo
     attributes:
       label: Repository URL
+      description: Link to the public source repository with its license and setup instructions.
       placeholder: https://github.com/you/my-theme
     validations:
       required: true
@@ -31,14 +24,6 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: license
-    attributes:
-      label: License
-      placeholder: MIT
-    validations:
-      required: true
-
   - type: textarea
     id: description
     attributes:
@@ -47,22 +32,17 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: upload
     id: screenshot
     attributes:
-      label: Screenshot URL
-      description: A 16:10 screenshot of the home page, or attach it after opening the issue.
+      label: Screenshot
+      description: Upload a screenshot of the demo home page. A 16:10 image fits the gallery best.
     validations:
       required: false
+      accept: ".png,.jpg,.jpeg,.webp"
 
-  - type: checkboxes
-    id: checks
+  - type: textarea
+    id: build
     attributes:
-      label: Checklist
-      options:
-        - label: The site builds with the current Tola release.
-          required: true
-        - label: The repository has a license.
-          required: true
-        - label: I own or maintain this project.
-          required: true
+      label: Build details
+      description: Share the Tola version you tested and any special build steps.

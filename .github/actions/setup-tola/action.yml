@@ -1,0 +1,23 @@
+name: Set up Tola
+description: Install and verify the release configured for the documentation site
+
+runs:
+  using: composite
+  steps:
+    - name: Install the configured Tola release
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/tola"
+        version=$(python3 -c 'import tomllib; print(tomllib.load(open("config/docs.toml", "rb"))["modules"]["docs"]["options"]["versions"]["tola"])')
+        archive="tola-${version}-x86_64-unknown-linux-musl.tar.gz"
+        release="repos/tola-rs/tola-ssg/releases/tags/v${version}"
+        digest=$(gh api "$release" | jq -er --arg file "$archive" '.assets[] | select(.name == $file) | .digest | strings | select(test("^sha256:[0-9a-f]{64}$"))')
+        gh release download "v$version" -R tola-rs/tola-ssg --pattern "$archive" --dir "$RUNNER_TEMP/tola"
+        (
+          cd "$RUNNER_TEMP/tola"
+          printf '%s  %s\n' "${digest#sha256:}" "$archive" | sha256sum -c -
+          tar -xzf "$archive"
+        )
+        printf '%s\n' "$RUNNER_TEMP/tola" >> "$GITHUB_PATH"

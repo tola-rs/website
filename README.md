@@ -30,9 +30,16 @@ tola build
 Run `tola dev` for live preview, `tola docs guide` for the authoring guide, or
 `tola docs check && tola check` to check both the frontend and the site.
 
-Pull requests and pushes to `main` build the site in GitHub Actions using the same
-Tola release. Run **Deploy Site** from `main` with **Publish the verified build to
-GitHub Pages** enabled to update the website.
+Pull requests build and check the site in GitHub Actions. Pushes to `main` also
+publish a successful build to GitHub Pages. To redeploy manually, run **Deploy Site**
+from `main` with **Publish the verified build to GitHub Pages** enabled.
+
+## Theme submissions
+
+After reviewing a theme, comment `/accept-theme` on its issue. The bot prepares
+the gallery changes and replies with a link to open a PR. Add a short description
+after the command to set the screenshot’s alt text. If needed, attach the screenshot
+on a new line in the comment. Merge the PR to publish the entry.
 
 ## Reference pages
 
